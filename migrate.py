@@ -18,9 +18,9 @@ manager.add_command('db', MigrateCommand)
 class ContasModel(db.Model):
     __tablename__ = 'contas'
     id = db.Column(db.Integer, primary_key = True)
-    nome = db.Column(db.String(80), nullable=True)
+    descricao = db.Column(db.String(80), nullable=True)
     preco = db.Column(db.Float(precision=2), nullable=True)
-    data_venc = db.Column(db.String(6), default=db.func.current_timestamp(), nullable=True)
+    data_venc = db.Column(db.Date(), nullable=True)
     comment = db.Column(db.Text(80))
 
 

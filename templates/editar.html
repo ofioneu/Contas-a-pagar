@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Contas</title>
+
+    <style>
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+        
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
+        </style>
+</head>
+
+<body>
+  <div id="titulo">
+    <h1>Contas a pagar</h1> 
+    &nbsp;
+    
+    <td><a class="btn btn-danger btn-sm" href="/" role="button">Voltar</a></td>
+  </div>
+    <div class = "container-fluid">
+        <table>
+            <tr>
+                <td><b>Descricao</b></td>
+                <td><b>Preço</b></td>
+                <td><b>Data Venc.</b></td>
+                <td><b>Comentário</b></td>
+                <td><b>Ação</b></td>
+            </tr>        
+        <tr>
+            <td>{{ item.descricao }}</td>
+            <td>{{ item.preco }}</td>
+            <td>{{ item.data_venc }}</td>
+            <td>{{ item.comment }}</td>
+            
+        </tr>
+        <tr>
+            <form action="/update/{{ item.id }}"  method="POST">
+                {{ form_up.csrf_token }}           
+                <td>{{ form_up.descricao(value = item.descricao, size=20) }} </td>
+                <td>{{ form_up.preco(value = item.preco) }}</td>
+                <td>{{ form_up.data_venc(value = item.data_venc) }}</td> 
+                <td>{{ form_up.comment(value = item.comment, cols="35", rows="5") }}</td>
+                <td>{{ form_up.submit() }}</td>
+            </form>
+        </tr>
+        
+    </table>
+   
+</body>
+</html>
