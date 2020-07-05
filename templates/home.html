@@ -51,9 +51,19 @@
 
     <div>
       <form action="/select/" method="POST">
-        {{ form.filtro.label }} {{ form.filtro }}
-        {{ form.submit() }}
-      </form>
+          {{ form.csrf_token }}
+          
+          {{ form.descricao_pesquise.label }} {{ form.descricao_pesquise(size=20) }}
+          <p></p>
+          {{ form.preco_pesquise.label }} {{ form.preco_pesquise }}
+          <p></p>
+          {{ form.date_pesquise.label }} {{ form.date_pesquise }}
+          <p></p>
+          {{ form.comment_pesquise.label }} {{ form.comment_pesquise(cols="35", rows="5") }}
+          <p></p>
+          {{ form.submit() }}
+          <p></p>
+        </form>
     </div>
   </div>
         <table>
@@ -75,12 +85,6 @@
             <td>{{ form.submit() }}</td>
             <td><a class="btn btn-danger btn-sm" href="/delete/{{ item.id }}" role="button">Delete</a></td>
             </form>
-              <!--a class="btn btn-danger btn-sm" href="/update/{{ item.id }}" role="button">Gravar</a>
-              &nbsp;
-              &nbsp;
-              &nbsp;
-              &nbsp;
-              -->
             </td>
         </tr>
         {% endfor %}

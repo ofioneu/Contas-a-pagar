@@ -65,14 +65,37 @@ def update(id):
 def select():
     form = MyForm()
     #if form.validate_on_submit:
-    filtro=form.filtro.data
-    print('Filtro: ', filtro)
-    item=ContasModel.query.filter_by(data_venc = filtro).all()
-    for i in item:
-        print(i.descricao)
+    descricao=form.descricao_pesquise.data
+    preco=form.preco_pesquise.data
+    date=form.date_pesquise.data    
+    comment=form.comment_pesquise.data
+    if descricao:
+        print("descricao")
+        descricao_pesquise = "%{}%".format(descricao)
+        item2=ContasModel.query.filter(ContasModel.descricao.like(descricao_pesquise)).all()
+        return render_template('return_filtro.html', item=item2)
+
+
+    elif preco:
+        print("preco")
+        item1=ContasModel.query.filter_by(preco = preco).all()
+        return render_template('return_filtro.html', item=item1)
+   
     
-        #return render_template('editar.html',form_up = form_up, item =item)
-    return redirect(url_for('gerenciar.home'))
+    elif date:
+        print("date")
+        item=ContasModel.query.filter_by(data_venc=date).all()
+        return render_template('return_filtro.html', item=item)
+
+    
+    elif comment:
+        print("comment")
+        comment_pesquise = "%{}%".format(comment)
+        item3=ContasModel.query.filter(ContasModel.comment.like(comment_pesquise)).all()
+        return render_template('return_filtro.html', item=item3)
+    else:
+       return "No DATA"
+
 
 
 @gerenciar.route('/delete/<int:id>', methods=['GET', 'POST'])
