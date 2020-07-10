@@ -1,41 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <title>Contas</title>
+  <!--link rel="stylesheet" href="/static/style.css"-->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>Contas</title>
 
-    <style>
-        table {
-          font-family: arial, sans-serif;
-          border-collapse: collapse;
-          width: 100%;
-        }
-        
-        td, th {
-          border: 1px solid #dddddd;
-          text-align: left;
-          padding: 8px;
-        }
-        
-        tr:nth-child(even) {
-          background-color: #dddddd;
-        }
-        </style>
 </head>
 
 <body>
-  <div id="titulo">
-    <h1>Contas a pagar</h1>
-  </div>
-    <div class = "container-fluid">
-      <div id="form" class ="col-sm-3">
-      <form method="POST" action="/post">
+  <!--CORPO DOS COMODOS-->
+  <div class="container">
+
+
+    <div id="titulo">
+      <h1>Contas a pagar</h1>
+    </div>
+
+    <div class="formularios">
+
+      <div id="form_cadastro" class="col-sm-3">
+        <div class="tituloform tituloformcadastro">
+          Cadastro:
+        </div>
+      
+        <form method="POST" action="/post">
           {{ form.csrf_token }}
-          
+
           {{ form.descricao.label }} {{ form.descricao(size=20) }}
           <p></p>
           {{ form.preco.label }} {{ form.preco }}
@@ -46,13 +42,16 @@
           <p></p>
           {{ form.submit() }}
           <p></p>
-    </form>
-    </div>
+        </form>
+      </div>
 
-    <div>
-      <form action="/select/" method="POST">
+      <div id="form_pesquisa" class="col-sm-3">
+        <div class="tituloform tituloformpesquisa">
+          Pesquisa:
+        </div>
+        <form action="/select/" method="POST">
           {{ form.csrf_token }}
-          
+
           {{ form.descricao_pesquise.label }} {{ form.descricao_pesquise(size=20) }}
           <p></p>
           {{ form.preco_pesquise.label }} {{ form.preco_pesquise }}
@@ -61,35 +60,45 @@
           <p></p>
           {{ form.comment_pesquise.label }} {{ form.comment_pesquise(cols="35", rows="5") }}
           <p></p>
-          {{ form.submit() }}
+          {{ form.submit_pesquise() }}
           <p></p>
         </form>
+      </div>
+
+      <div id="form_valor" class="col-sm-3">
+        <!-- aqui vai o valor da soma -->
+        <h2>Valor total:</h2> {{ soma[0] }}
+      </div>
     </div>
-  </div>
-        <table>
-            <tr>
-                <td><b>Descricao</b></td>
-                <td><b>Preço</b></td>
-                <td><b>Data Venc.</b></td>
-                <td><b>Comentário</b></td>
-                <td><b>Atualizar</b></td>
-                <td><b>Apagar</b></td>
-            </tr>        
-        {% for item in contas %}
-        <tr>            
-            <form action="/update/{{ item.id }}" method="POST">
-            <td>{{ form.descricao(value = item.descricao, size=20) }}</td>
-            <td>{{ form.preco(value = item.preco) }}</td>
-            <td>{{ form.data_venc(value = item.data_venc) }}</td>
-            <td>{{ form.comment(value = item.comment, cols="35", rows="5") }}</td>
-            <td>{{ form.submit() }}</td>
-            <td><a class="btn btn-danger btn-sm" href="/delete/{{ item.id }}" role="button">Delete</a></td>
-            </form>
-            </td>
-        </tr>
-        {% endfor %}
-        
+
+    <table>
+      <tr>
+        <td><b>Descricao</b></td>
+        <td><b>Preço</b></td>
+        <td><b>Data Venc.</b></td>
+        <td><b>Comentário</b></td>
+        <td><b>Atualizar</b></td>
+        <td><b>Apagar</b></td>
+      </tr>
+      {% for item in contas %}
+      <tr>
+        <form action="/update/{{ item.id }}" method="POST">
+          <td>{{ form.descricao(value = item.descricao, size=20) }}</td>
+          <td>{{ form.preco(value = item.preco) }}</td>
+          <td>{{ form.data_venc(value = item.data_venc) }}</td>
+          <td>{{ form.comment(value = item.comment, cols="35", rows="5") }}</td>
+          <td>{{ form.submit() }}</td>
+          <td><a class="btn btn-danger btn-sm" href="/delete/{{ item.id }}" role="button">Delete</a></td>
+        </form>
+        </td>
+      </tr>
+      {% endfor %}
+
     </table>
 
+
+  </div>
+
 </body>
+
 </html>
