@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <!--link rel="stylesheet" href="/static/style.css"-->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>Contas</title>
+
+</head>
+
+<body>
+  <!--CORPO DOS COMODOS-->
+  <div class="container">
+
+
+    <div id="titulo">
+      <h1>Contas a pagar</h1>
+    </div>
+
+    <div class="formularios">
+      <div id="form_pesquisa" class="col-sm-3">
+        <div class="tituloform tituloformpesquisa">
+          Pesquisa:
+        </div>
+        <form action="/select_history/" method="POST">
+          {{ form.csrf_token }}
+
+          {{ form.descricao_pesquise.label }} {{ form.descricao_pesquise(size=20) }}
+          <p></p>
+          {{ form.preco_pesquise.label }} {{ form.preco_pesquise }}
+          <p></p>
+          {{ form.date_pesquise.label }} {{ form.date_pesquise }}
+          <p></p>
+          {{ form.comment_pesquise.label }} {{ form.comment_pesquise(cols="35", rows="5") }}
+          <p></p>
+          {{ form.submit_pesquise() }}
+          <p></p>
+        </form>
+      </div>
+
+      <div id="form_valor" class="col-sm-3">
+        <!-- aqui vai o valor da soma -->
+        <h2>Valor total:</h2> {{ soma_history }}
+      </div>
+    </div>
+
+    <div id = "btn-voltar">
+        <td><a class="btn btn-danger btn-sm" href="/" role="button">Voltar</a></td>
+      </div>
+
+
+    <table>
+        <tr>
+          <td><b>Descricao</b></td>
+          <td><b>Preço</b></td>
+          <td><b>Data Venc.</b></td>
+          <td><b>Comentário</b></td>
+        </tr>
+        <!--Data de vencimento-->
+        {% for a in item %}
+        <tr>
+          <td>{{ a.descricao }}</td>
+          <td>{{ a.preco }}</td>
+          <td>{{ a.data_venc }}</td>
+          <td>{{ a.comment }}</td>
+        </tr>
+        {% endfor %}
+    
+      </table>
+    </div>
+
+
+  </div>
+
+</body>
+
+</html>
