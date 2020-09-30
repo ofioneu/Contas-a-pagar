@@ -1,11 +1,24 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DecimalField, DateTimeField, SubmitField, TextAreaField, DateField, BooleanField
+from wtforms import StringField, DecimalField, DateTimeField, SubmitField, TextAreaField, DateField, BooleanField, FloatField
 from wtforms.validators import DataRequired
+from wtforms import validators
 
 class MyForm(FlaskForm):
-    descricao = StringField('Descrição:', validators=[DataRequired()])
-    preco = StringField('Valor:', validators=[DataRequired(message="Somente numeros e .")])
-    data_venc = DateField('Data Venc:', validators=[DataRequired(message="Use - para separar a data! (09-02-1991")], format='%Y-%m-%d')
+    descricao = StringField('Descrição:', [validators.DataRequired(message='Esse campo é obrigatório')])
+    preco = FloatField('Valor:', [validators.NumberRange(min=0.1, max=1000000.0, message="Somente numeros e .")])
+    data_venc = StringField('Data Venc:', validators=[DataRequired(message="09/02/1991 = 09021991")])
+    comment = StringField('Comentário:')
+    date_pesquise = StringField('Data venc:')
+    descricao_pesquise = StringField('Descrição:')
+    preco_pesquise = StringField('Valor:')
+    comment_pesquise = StringField('Comentário:')
+    submit = SubmitField('Gravar')
+    submit_pesquise = SubmitField('Pesquisar')
+
+class Historico(FlaskForm):
+    descricao = StringField('Descrição:', [validators.DataRequired(message='Esse campo é obrigatório')])
+    preco = FloatField('Valor:', [validators.NumberRange(min=0.1, max=1000000.0, message="Somente numeros e .")])
+    data_venc = StringField('Data Venc:', [validators.NumberRange(min=8, max=8, message="09/02/1991 = 09021991")])
     comment = StringField('Comentário:')
     date_pesquise = StringField('Data venc:')
     descricao_pesquise = StringField('Descrição:')

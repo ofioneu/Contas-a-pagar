@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="br">
 
 <head>
   <meta charset="UTF-8">
@@ -7,6 +7,11 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="{{ url_for('static', filename='js/form_validator.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" integrity="sha512-UdIMMlVx0HEynClOIFSyOrPggomfhBKJE28LKl8yR3ghkgugPnG6iLfRfHwushZl1MOPSY6TsuBDGPK2X4zYKg==" crossorigin="anonymous"></script>
   <!--link rel="stylesheet" href="/static/style.css"-->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <title>Contas</title>
@@ -19,7 +24,7 @@
 
 
     <div id="titulo">
-      <h1>Contas a pagar</h1>
+      <h1 id="titulo">GERENCIADOR DE PAGAMENTOS</h1>
     </div>
 
     <div class="formularios">
@@ -29,18 +34,18 @@
           Cadastro:
         </div>
       
-        <form method="POST" action="/post">
+        <form class="regras" method="POST" action="/post">
           {{ form.csrf_token }}
 
           {{ form.descricao.label }} {{ form.descricao(size=20) }}
           <p></p>
-          {{ form.preco.label }} {{ form.preco }}
+          <span id="preco">{{ form.preco.label }} {{ form.preco }} </span>
           <p></p>
-          {{ form.data_venc.label }} {{ form.data_venc }}
+          <span id="data" for="data">{{ form.date_pesquise.label }} {{ form.date_pesquise }}</span>
           <p></p>
           {{ form.comment.label }} {{ form.comment(cols="35", rows="5") }}
           <p></p>
-          {{ form.submit() }}
+          <span id="btn_gravar">{{ form.submit() }}</span>
           <p></p>
         </form>
       </div>
@@ -49,14 +54,14 @@
         <div class="tituloform tituloformpesquisa">
           Pesquisa:
         </div>
-        <form action="/select/" method="POST">
+        <form class="regras" action="/select/" method="POST">
           {{ form.csrf_token }}
 
           {{ form.descricao_pesquise.label }} {{ form.descricao_pesquise(size=20) }}
           <p></p>
-          {{ form.preco_pesquise.label }} {{ form.preco_pesquise }}
+          <span id="preco_p">{{ form.preco.label }} {{ form.preco }}</span>
           <p></p>
-          {{ form.date_pesquise.label }} {{ form.date_pesquise }}
+          <span id="data_p">{{ form.date_pesquise.label }} {{ form.date_pesquise }}</span>
           <p></p>
           {{ form.comment_pesquise.label }} {{ form.comment_pesquise(cols="35", rows="5") }}
           <p></p>
@@ -70,6 +75,12 @@
         <h2>Valor total:</h2> {{ soma[0] }}
       </div>
     </div>
+
+    <div id="btn-history">
+      <a class="btn btn-primary" role="button" href="{{ url_for('gerenciar.history') }}">Historico</a>
+      <p></p>
+  </div>
+
 
     <table>
       <tr>
@@ -85,9 +96,10 @@
         <form action="/update/{{ item.id }}" method="POST">
           <td>{{ form.descricao(value = item.descricao, size=20) }}</td>
           <td>{{ form.preco(value = item.preco) }}</td>
-          <td>{{ form.data_venc(value = item.data_venc) }}</td>
+          <td>{{ form.data_venc(value = item.data_venc)}}</td>
           <td>{{ form.comment(value = item.comment, cols="35", rows="5") }}</td>
           <td>{{ form.submit() }}</td>
+          <!--<td><a class="btn btn-primary" role="button" href="/update/{{ item.id }}">Gravar</a></td>-->
           <td><a class="btn btn-danger btn-sm" href="/delete/{{ item.id }}" role="button">Delete</a></td>
         </form>
         </td>

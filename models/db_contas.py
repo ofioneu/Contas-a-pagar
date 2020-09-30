@@ -11,7 +11,7 @@ class ContasModel(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     descricao = db.Column(db.String(80), nullable=True)
     preco = db.Column(db.Float(precision=2), nullable=True)
-    data_venc = db.Column(db.Date, nullable=True)
+    data_venc = db.Column(db.String(8), nullable=True)
     comment = db.Column(db.Text(80))
 
     def __repr__(self):
@@ -20,18 +20,9 @@ class ContasModel(db.Model):
     def __init__(self, descricao, preco, data_venc, comment):
         self.descricao = descricao
         self.preco = preco
-        self.data_venc = data_venc
-        
+        self.data_venc = data_venc        
         self.comment = comment
         
-
-    def json(self):
-        return {
-            'nome': self.descricao,
-            'preco': self.preco,
-            'data_venc': self.data_venc,
-            'comment': self.comment
-        }
     
     def get(self):
         alldata = db.query.all()
@@ -53,3 +44,32 @@ class ContasModel(db.Model):
     def delete_contas(self):
         db.session.delete(self)
         db.session.commit()
+
+class HistoryModel(db.Model):
+    __tablename__ = 'historico_contas'
+    id = db.Column(db.Integer, primary_key = True)
+    descricao = db.Column(db.String(80), nullable=True)
+    preco = db.Column(db.Float(precision=2), nullable=True)
+    data_venc = db.Column(db.String(8), nullable=True)
+    comment = db.Column(db.Text(80))
+
+    def __repr__(self):
+        return '<HistoryModel %r>' % self.id
+
+    def __init__(self, descricao, preco, data_venc, comment):
+        self.descricao = descricao
+        self.preco = preco
+        self.data_venc = data_venc        
+        self.comment = comment
+        
+    
+    def get(self):
+        alldata = db.query.all()
+        return alldata
+
+
+    def find_contas(self, id):
+        conta = db.query.filter_by(id=id).first()
+        if conta:
+            return conta
+        return None

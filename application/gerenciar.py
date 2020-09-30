@@ -1,8 +1,9 @@
 from flask import Flask, render_template, redirect, Blueprint, url_for
-from forms.form import MyForm
-from models.db_contas import db, ContasModel
+from forms.form import MyForm, Historico
+from models.db_contas import db, ContasModel, HistoryModel
 from app import app_config
 from sqlalchemy import func
+import datetime
 
 from flask_mail import Mail, Message
 
@@ -32,7 +33,9 @@ def post():
         comment = form.comment.data
         # aqui é onde as informações serão enviadas para o banco
         contas = ContasModel(descricao, preco, data_venc, comment)
+        historico_contas = HistoryModel(descricao, preco, data_venc, comment)
         db.session.add(contas)
+        db.session.add(historico_contas)
         db.session.commit()
         # aqui é selecionado todas as informações do banco e salvo em alldata
         alldata = ContasModel.query.all()
@@ -53,10 +56,18 @@ def update(id):
     form_up = MyForm()
     if form_up.validate_on_submit:
         item = ContasModel.query.get_or_404(id)
+        item_historico = HistoryModel.query.get_or_404(id)
         item.descricao = form_up.descricao.data
         item.preco = form_up.preco.data
-        item.data_venc = form_up.data_venc.data
+        item.data_venc=form_up.data_venc.data        
         item.comment = form_up.comment.data
+
+        #atualiza o histórico
+        item_historico = HistoryModel.query.get_or_404(id)
+        item_historico.descricao = form_up.descricao.data
+        item_historico.preco = form_up.preco.data
+        item_historico.data_venc=form_up.data_venc.data        
+        item_historico.comment = form_up.comment.data
         # aqui é onde as informações serão enviadas para o banco
         db.session.commit()
     return redirect('/')
@@ -65,7 +76,6 @@ def update(id):
 @gerenciar.route('/select/', methods=['GET', 'POST'])
 def select():
     form = MyForm()
-    # if form.validate_on_submit:
     descricao = form.descricao_pesquise.data
     preco = form.preco_pesquise.data
     date = form.date_pesquise.data
@@ -80,10 +90,11 @@ def select():
         return render_template('return_filtro.html', item=item1, soma=soma_filtro(ContasModel.preco, preco))
 
     elif date:
-        data_pesquise = "%{}%".format(date)
-        item = ContasModel.query.filter(
-            ContasModel.data_venc.like(data_pesquise)).all()
-        return render_template('return_filtro.html', item=item, soma=soma_filtro(ContasModel.data_venc, data_pesquise))
+        data_pesquise ="%{}%".format(date)
+        #data_pesquise=datetime.datetime.strptime(date, '%d%m%Y').strftime('%Y-%m-%d')
+        #print(data_pesquise)
+        item = ContasModel.query.filter(ContasModel.data_venc.like(data_pesquise)).all()
+        return render_template('return_filtro.html', item=item, soma=soma_filtro(ContasModel.data_venc, date))
 
     elif comment:
         comment_pesquise = "%{}%".format(comment)
@@ -91,6 +102,44 @@ def select():
         return render_template('return_filtro.html', item=item3, soma=soma_filtro(ContasModel.comment, comment_pesquise))
     else:
        return render_template('no_data.html')
+
+
+@gerenciar.route('/history/', methods=['GET', 'POST'])
+def history():
+    form = Historico()
+    valor_history=soma_history()
+    return render_template('history.html', form=form)
+
+@gerenciar.route('/select_history/', methods=['GET', 'POST'])
+def select_history():
+    form = Historico()
+    if form.validate_on_submit:
+        descricao = form.descricao_pesquise.data
+        preco = form.preco_pesquise.data
+        date = form.date_pesquise.data
+        comment = form.comment_pesquise.data
+        if descricao:
+            descricao_pesquise = "%{}%".format(descricao)
+            item2 = HistoryModel.query.filter(HistoryModel.descricao.like(descricao_pesquise)).all()
+            return render_template('history.html', item=item2, soma_history = soma_filtro_history(HistoryModel.descricao, descricao_pesquise), form =form)
+
+        elif preco:
+            item1 = HistoryModel.query.filter_by(preco=preco).all()
+            return render_template('history.html', item=item1, soma_history=soma_filtro_history(HistoryModel.preco, preco), form =form)
+
+        elif date:
+            data_pesquise="%{}%".format(date)
+            item = HistoryModel.query.filter(HistoryModel.data_venc.like(data_pesquise)).all()
+            print(item)
+            return render_template('history.html', item=item, soma_history=soma_filtro_history(HistoryModel.data_venc, data_pesquise), form=form)
+
+        elif comment:
+            comment_pesquise = "%{}%".format(comment)
+            print(comment_pesquise)
+            item3 = HistoryModel.query.filter(HistoryModel.comment.like(comment_pesquise)).all()
+            return render_template('history.html', item=item3, soma_history=soma_filtro_history(HistoryModel.comment, comment_pesquise), form =form)
+        else:
+            return render_template('no_data.html')
 
 
 @gerenciar.route('/delete/<int:id>', methods=['GET', 'POST'])
@@ -113,9 +162,14 @@ def send_mail():
 def soma():
     soma = db.session.query(func.sum(ContasModel.preco))
     i=0
+    
     for i in soma:
-        pass
-    return i
+        print(i)
+        #pass
+    if(None in i):
+        return '0'
+    else:
+        return i
 
 def soma_filtro(campo, data_form):
     print('campo: ', campo)
@@ -130,4 +184,38 @@ def soma_filtro(campo, data_form):
         valor=0
         for i in resultado:
             valor += i.preco
+        return valor
+
+def soma_history():
+    soma = db.session.query(func.sum(HistoryModel.preco))
+    i=0
+    for i in soma:
+        pass
+    return i
+
+
+def soma_filtro_history(campo, data_form):
+    print('campo: ', campo)
+    print(data_form)
+    if campo == 'preco':
+        print('entrei no if')
+        resultado = HistoryModel.query.filter_by(preco=preco).all()
+        valor=0
+        for i in resultado:
+            print('entrei no for')
+            valor += i.preco
+            print(i)
+        return valor
+    else:
+        print('entrei no else')
+        resultado = HistoryModel.query.filter(campo.like(data_form)).all()
+        print(resultado)
+        valor=0
+        for i in resultado:
+            print('entrei no for10')
+            print(i.preco)
+            try:
+                valor += i.preco
+            except:
+                pass
         return valor

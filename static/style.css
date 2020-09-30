@@ -49,14 +49,12 @@ tr:nth-child(even) {
 
 label{
     display: inline-block;
-    float: left;
     clear: left;
     width: 74px;
     text-align: left;
 }
 input {
     display: inline-block;
-    float: left;
     margin-left: 10px;
     margin-bottom: 10px;
 }
@@ -72,3 +70,41 @@ input[type=submit]{
 .tituloform{
     font-size:28px;
 }
+
+#submit{
+    background: rgb(40,167,69);
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+    color: white;
+}
+
+#submit:hover{
+    background:rgb(33, 136, 56);
+}
+.btn.btn-danger,
+.btn.btn-danger:hover{
+    height: 40px;
+    text-align: center;
+    margin-bottom: 5px;
+    padding-top: 10px;
+}
+
+#submit_pesquise{
+    background: #286090;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+    color: white;
+}
+
+#submit_pesquise:hover{
+    background:#285080;
+}
+
+#titulo{
+    color:#286090;
+    font-family: Verdana;
+    padding: 15px;
+}
+
