@@ -19,7 +19,7 @@ class ContasModel(db.Model):
     __tablename__ = 'contas'
     id = db.Column(db.Integer, primary_key = True)
     descricao = db.Column(db.String(80), nullable=True)
-    preco = db.Column(db.Float(precision=2), nullable=True)
+    preco = db.Column(db.String(), nullable=True)
     data_venc = db.Column(db.String(8), nullable=True)
     comment = db.Column(db.Text(80))
 
@@ -27,7 +27,7 @@ class HistoryModel(db.Model):
     __tablename__ = 'historico_contas'
     id = db.Column(db.Integer, primary_key = True)
     descricao = db.Column(db.String(80), nullable=True)
-    preco = db.Column(db.Float(precision=2), nullable=True)
+    preco = db.Column(db.String(), nullable=True)
     data_venc = db.Column(db.String(8), nullable=True)
     comment = db.Column(db.Text(80))
 

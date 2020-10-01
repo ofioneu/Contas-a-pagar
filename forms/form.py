@@ -5,8 +5,8 @@ from wtforms import validators
 
 class MyForm(FlaskForm):
     descricao = StringField('Descrição:', [validators.DataRequired(message='Esse campo é obrigatório')])
-    preco = FloatField('Valor:', [validators.NumberRange(min=0.1, max=1000000.0, message="Somente numeros e .")])
-    data_venc = StringField('Data Venc:', validators=[DataRequired(message="09/02/1991 = 09021991")])
+    preco = StringField('Valor:', [validators.NumberRange(min=0.1, max=1000000.0, message="Somente numeros e .")])
+    data_venc = StringField('Data Venc:', [validators.DataRequired(message="09/02/1991 = 09021991")])
     comment = StringField('Comentário:')
     date_pesquise = StringField('Data venc:')
     descricao_pesquise = StringField('Descrição:')
@@ -17,7 +17,7 @@ class MyForm(FlaskForm):
 
 class Historico(FlaskForm):
     descricao = StringField('Descrição:', [validators.DataRequired(message='Esse campo é obrigatório')])
-    preco = FloatField('Valor:', [validators.NumberRange(min=0.1, max=1000000.0, message="Somente numeros e .")])
+    preco = StringField('Valor:', [validators.NumberRange(min=0.1, max=1000000.0, message="Somente numeros e .")])
     data_venc = StringField('Data Venc:', [validators.NumberRange(min=8, max=8, message="09/02/1991 = 09021991")])
     comment = StringField('Comentário:')
     date_pesquise = StringField('Data venc:')

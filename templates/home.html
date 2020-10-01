@@ -12,7 +12,7 @@
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" integrity="sha512-UdIMMlVx0HEynClOIFSyOrPggomfhBKJE28LKl8yR3ghkgugPnG6iLfRfHwushZl1MOPSY6TsuBDGPK2X4zYKg==" crossorigin="anonymous"></script>
-  <!--link rel="stylesheet" href="/static/style.css"-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <title>Contas</title>
 
@@ -39,9 +39,9 @@
 
           {{ form.descricao.label }} {{ form.descricao(size=20) }}
           <p></p>
-          <span id="preco">{{ form.preco.label }} {{ form.preco }} </span>
+          {{ form.preco.label }} {{ form.preco }}
           <p></p>
-          <span id="data" for="data">{{ form.date_pesquise.label }} {{ form.date_pesquise }}</span>
+          <span id="data" for="data">{{ form.data_venc.label }} {{ form.data_venc }}</span>
           <p></p>
           {{ form.comment.label }} {{ form.comment(cols="35", rows="5") }}
           <p></p>
@@ -59,7 +59,7 @@
 
           {{ form.descricao_pesquise.label }} {{ form.descricao_pesquise(size=20) }}
           <p></p>
-          <span id="preco_p">{{ form.preco.label }} {{ form.preco }}</span>
+          {{ form.preco_pesquise.label }} {{ form.preco_pesquise }}
           <p></p>
           <span id="data_p">{{ form.date_pesquise.label }} {{ form.date_pesquise }}</span>
           <p></p>
@@ -72,7 +72,7 @@
 
       <div id="form_valor" class="col-sm-3">
         <!-- aqui vai o valor da soma -->
-        <h2>Valor total:</h2> {{ soma[0] }}
+        <h2>Valor total:</h2> <p id="soma_home">{{ soma }}</p>
       </div>
     </div>
 

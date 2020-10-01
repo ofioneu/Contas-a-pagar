@@ -5,6 +5,8 @@ from app import app_config
 from sqlalchemy import func
 import datetime
 
+import babel
+
 from flask_mail import Mail, Message
 
 
@@ -14,11 +16,10 @@ app = Flask(__name__, template_folder='templates')
 
 mail = Mail(app)
 
-
 @gerenciar.route('/', methods=['GET', 'POST'])
 def home():
     form = MyForm()
-    conta = ContasModel.query.all()
+    conta = ContasModel.query.order_by(ContasModel.data_venc.desc())
     return render_template('home.html', form=form,  contas=conta, soma=soma())
 
 
@@ -76,32 +77,39 @@ def update(id):
 @gerenciar.route('/select/', methods=['GET', 'POST'])
 def select():
     form = MyForm()
-    descricao = form.descricao_pesquise.data
-    preco = form.preco_pesquise.data
-    date = form.date_pesquise.data
-    comment = form.comment_pesquise.data
-    if descricao:
-        descricao_pesquise = "%{}%".format(descricao)
-        item2 = ContasModel.query.filter(ContasModel.descricao.like(descricao_pesquise)).all()
-        return render_template('return_filtro.html', item=item2, soma = soma_filtro(ContasModel.descricao, descricao_pesquise))
+    if form.validate_on_submit:
+        descricao = form.descricao_pesquise.data
+        print('descricao--', descricao)
+        preco = form.preco_pesquise.data
+        print('preco--', preco)
+        date = form.date_pesquise.data
+        comment = form.comment_pesquise.data
+        if descricao:
+            print("desc")
+            descricao_pesquise = "%{}%".format(descricao)
+            item2 = ContasModel.query.filter(ContasModel.descricao.like(descricao_pesquise)).all()
+            return render_template('return_filtro.html', item=item2, soma = soma_filtro(ContasModel.descricao, descricao_pesquise))
 
-    elif preco:
-        item1 = ContasModel.query.filter_by(preco=preco).all()
-        return render_template('return_filtro.html', item=item1, soma=soma_filtro(ContasModel.preco, preco))
+        elif preco:
+            print('p')
+            item1 = ContasModel.query.filter_by(preco=preco).all()
+            return render_template('return_filtro.html', item=item1, soma=soma_filtro(ContasModel.preco, preco))
 
-    elif date:
-        data_pesquise ="%{}%".format(date)
-        #data_pesquise=datetime.datetime.strptime(date, '%d%m%Y').strftime('%Y-%m-%d')
-        #print(data_pesquise)
-        item = ContasModel.query.filter(ContasModel.data_venc.like(data_pesquise)).all()
-        return render_template('return_filtro.html', item=item, soma=soma_filtro(ContasModel.data_venc, date))
+        elif date:
+            print('date')
+            data_pesquise ="%{}%".format(date)
+            #data_pesquise=datetime.datetime.strptime(date, '%d%m%Y').strftime('%Y-%m-%d')
+            #print(data_pesquise)
+            item = ContasModel.query.filter(ContasModel.data_venc.like(data_pesquise)).all()
+            return render_template('return_filtro.html', item=item, soma=soma_filtro(ContasModel.data_venc, date))
 
-    elif comment:
-        comment_pesquise = "%{}%".format(comment)
-        item3 = ContasModel.query.filter(ContasModel.comment.like(comment_pesquise)).all()
-        return render_template('return_filtro.html', item=item3, soma=soma_filtro(ContasModel.comment, comment_pesquise))
-    else:
-       return render_template('no_data.html')
+        elif comment:
+            print('coment')
+            comment_pesquise = "%{}%".format(comment)
+            item3 = ContasModel.query.filter(ContasModel.comment.like(comment_pesquise)).all()
+            return render_template('return_filtro.html', item=item3, soma=soma_filtro(ContasModel.comment, comment_pesquise))
+        else:
+            return render_template('no_data.html')
 
 
 @gerenciar.route('/history/', methods=['GET', 'POST'])
@@ -160,31 +168,36 @@ def send_mail():
 
 # funções que retornam somatoria do campo preco
 def soma():
-    soma = db.session.query(func.sum(ContasModel.preco))
-    i=0
-    
-    for i in soma:
-        print(i)
-        #pass
-    if(None in i):
-        return '0'
-    else:
-        return i
+    soma =  ContasModel.query.filter_by(preco=ContasModel.preco).all()    #i=0
+    somatoriaVet = []    
+    for i in soma:        
+        valorStr =str(i.preco)
+        valorFormat = babel.numbers.parse_decimal(valorStr, locale='pt_BR')
+        somatoriaVet.append(float(valorFormat))    
+    somatoria = sum(somatoriaVet)               
+    return somatoria
 
 def soma_filtro(campo, data_form):
     print('campo: ', campo)
     if campo == 'preco':
         resultado = ContasModel.query.filter_by(preco=preco).all()
-        valor=0
+        somatoriaVet = []
         for i in resultado:
-            valor += i.preco
-        return valor
+            valorStr =str(i.preco)
+            valorFormat = babel.numbers.parse_decimal(valorStr, locale='pt_BR')
+            somatoriaVet.append(float(valorFormat))    
+        somatoria = sum(somatoriaVet)               
+        return somatoria
     else:
         resultado = ContasModel.query.filter(campo.like(data_form)).all()
         valor=0
+        somatoriaVet=[]
         for i in resultado:
-            valor += i.preco
-        return valor
+            valorStr =str(i.preco)
+            valorFormat = babel.numbers.parse_decimal(valorStr, locale='pt_BR')
+            somatoriaVet.append(float(valorFormat))  
+        somatoria = sum(somatoriaVet)               
+        return somatoria
 
 def soma_history():
     soma = db.session.query(func.sum(HistoryModel.preco))
