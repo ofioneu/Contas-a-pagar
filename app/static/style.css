@@ -1,0 +1,147 @@
+.container {
+    background: white;
+    width: auto;
+
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: auto;
+}
+
+td, th {
+    border: 1px solid #0c0c0c;
+    text-align: left;
+    padding: 8px;
+    width: 5em;
+}
+
+tr:nth-child(even) {
+    background-color: #C2E0F0;
+}
+
+.formularios {
+    background: rgba(167, 170, 173, 0.867);
+    text-align: left;
+}
+
+#form_pesquisa {
+    color: black;
+    background: white;
+    width: auto;
+}
+
+#form_cadastro {
+    color: black;
+    background:white;
+    width: auto;
+}
+
+#form_valor {
+    text-align: center;
+    font-size: 50px;
+    color: royalblue;
+    width: 33.3%;
+}
+
+
+#titulo {
+    text-align: center;
+}
+
+label{
+    display: inline-block;
+    clear: left;
+    width: 74px;
+    text-align: left;
+    margin-right: 18px;
+}
+input:not(#linha_table>tr) {
+    display: inline-block;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    width: 12em;
+}
+
+input[type=submit]{
+    -webkit-appearance: button;
+    cursor: pointer;
+    width: 100%;
+    margin-left: 0px;
+    height: 40px;
+}
+
+div.table{
+    overflow-x: scroll;
+}
+
+.tituloform{
+    font-size:28px;
+}
+
+#submit{
+    background: rgb(40,167,69);
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+    color: white;
+}
+
+#submit:hover{
+    background:rgb(33, 136, 56);
+}
+
+
+#list_submit{
+    background: rgb(40,167,69);
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+    color: white;
+}
+
+#list_submit:hover{
+    background:rgb(33, 136, 56);
+}
+
+.btn.btn-danger,
+.btn.btn-danger:hover{
+    height: 40px;
+    text-align: center;
+    margin-bottom: 5px;
+    padding-top: 10px;
+}
+
+#submit_pesquise{
+    background: #286090;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+    color: white;
+}
+
+#submit_pesquise:hover{
+    background:#285080;
+}
+
+#titulo{
+    color:#286090;
+    font-family: Verdana;
+    padding: 15px;
+}
+
+#soma_home{
+   color: royalblue;
+}
+
+#coluna_name > td{
+    background: #5FB7E5;
+    width: 2em;
+}
+
+
+#list_preco, #list_date{
+    width: 6em;
+}
+
