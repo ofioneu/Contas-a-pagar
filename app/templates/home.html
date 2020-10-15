@@ -65,6 +65,8 @@
           <p></p>
           {{ form.comment_pesquise.label }} {{ form.comment_pesquise(cols="35", rows="5") }}
           <p></p>
+          {{ form.status_pg_pesquise.label }} {{ form.status_pg_pesquise }}
+          <p></p>
           {{ form.submit_pesquise() }}
           <p></p>
         </form>
@@ -87,6 +89,7 @@
         <td><b>Preço</b></td>
         <td><b>Data Venc.</b></td>
         <td><b>Comentário</b></td>
+        <td><b>Status</b></td>
         <td><b>Atualizar</b></td>
         <td><b>Apagar</b></td>
       </tr>
@@ -97,6 +100,7 @@
           <td>{{ form_lista.list_preco(value = item.preco) }}</td>
           <td>{{ form_lista.list_date(value = item.data_venc.strftime('%d/%m/%Y'))}}</td>
           <td>{{ form_lista.list_comment(value = item.comment, cols="35", rows="5") }}</td>
+          <td>{{ form_lista.status_pg.label }} {{ form_lista.status_pg(value = item.pago) }}</td>
           <td>{{ form_lista.list_submit() }}</td>
           <td><a class="btn btn-danger btn-sm" href="/delete/{{ item.id }}" role="button">Delete</a></td>
         </form>

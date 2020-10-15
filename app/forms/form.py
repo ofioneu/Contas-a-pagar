@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DecimalField, DateTimeField, SubmitField, TextAreaField, DateField, BooleanField, FloatField
+from wtforms import  * 
 from wtforms.validators import DataRequired
 from wtforms import validators
 
@@ -13,8 +13,10 @@ class MyForm(FlaskForm):
     descricao_pesquise = StringField('Descrição:')
     preco_pesquise = StringField('Valor:')
     comment_pesquise = StringField('Comentário:')
+    status_pg_pesquise = BooleanField('Pago:')
     submit = SubmitField('Gravar')
     submit_pesquise = SubmitField('Pesquisar')
+    
 
 class Historico(FlaskForm):
     descricao = StringField('Descrição:', [validators.DataRequired(message='Esse campo é obrigatório')])
@@ -26,6 +28,7 @@ class Historico(FlaskForm):
     descricao_pesquise = StringField('Descrição:')
     preco_pesquise = StringField('Valor:')
     comment_pesquise = StringField('Comentário:')
+    status_pg_pesquise = BooleanField('Pago:')
     submit = SubmitField('Gravar')
     submit_pesquise = SubmitField('Pesquisar')
 
@@ -34,6 +37,7 @@ class ListaHome(FlaskForm):
     list_preco = StringField('Valor:')
     list_date = StringField('Data Venc:')
     list_comment = StringField('Comentário:')
+    status_pg = BooleanField('Pago:')
     list_submit = SubmitField('Atualizar')
 
 

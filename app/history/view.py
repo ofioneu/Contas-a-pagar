@@ -23,6 +23,7 @@ def historico_filtro():
     if form.validate_on_submit:
         descricao = form.descricao_pesquise.data
         preco = form.preco_pesquise.data
+        pago = form.status_pg_pesquise.data
         try:
             date = form.date_pesquise_ini.data
             date_f = form.date_pesquise_fim.data
@@ -49,6 +50,11 @@ def historico_filtro():
             print(comment_pesquise)
             item3 = HistoryModel.query.filter(HistoryModel.comment.like(comment_pesquise)).all()
             return render_template('history.html', item=item3, soma_history=soma_filtro_history(HistoryModel.comment, comment_pesquise, None), form =form)
+        elif pago:
+            print('pago= ',pago)
+            item4 = HistoryModel.query.filter(HistoryModel.pago.is_(pago)).all()
+            return render_template('history.html', item=item4, soma_history=soma_filtro_history(HistoryModel.pago, pago, None), form =form)
+
         else:
             return render_template('no_data.html')
 
@@ -77,6 +83,16 @@ def soma_filtro_history(campo, date_format, datef_format):
         return somatoria
     elif campo == HistoryModel.data_venc:
         resultado = HistoryModel.query.filter(HistoryModel.data_venc.between(date_format, datef_format))
+        somatoriaVet=[]
+        for i in resultado:
+            valorStr =str(i.preco)
+            valorFormat = babel.numbers.parse_decimal(valorStr, locale='pt_BR')
+            somatoriaVet.append(float(valorFormat))
+        somatoria = sum(somatoriaVet)
+        return somatoria
+        
+    elif campo == HistoryModel.pago:
+        resultado = HistoryModel.query.filter(HistoryModel.pago.is_(campo))
         somatoriaVet=[]
         for i in resultado:
             valorStr =str(i.preco)

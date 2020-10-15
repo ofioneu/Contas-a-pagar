@@ -45,6 +45,8 @@
           <p></p>
           {{ form.comment_pesquise.label }} {{ form.comment_pesquise(cols="35", rows="5") }}
           <p></p>
+          {{ form.status_pg_pesquise.label }} {{ form.status_pg_pesquise }}
+          <p></p>
           {{ form.submit_pesquise() }}
           <p></p>
         </form>
@@ -67,16 +69,26 @@
           <td><b>Preço</b></td>
           <td><b>Data Venc.</b></td>
           <td><b>Comentário</b></td>
+          <td><b>Status</b></td>
+          <td><b>Data modificação</b></td>
         </tr>
         <!--Data de vencimento-->
+        
         {% for a in item %}
-        <tr>
+        <tr id="list_h">
           <td>{{ a.descricao }}</td>
           <td>{{ a.preco }}</td>
           <td>{{ a.data_venc.strftime('%d/%m/%Y')}}</td>
           <td>{{ a.comment }}</td>
+          {% if a.pago == '1' %}
+            <td id="list_h_td">Pago</td>
+          {% else %}
+          <td id="list_h_td">Aberto</td>
+          {% endif %}
+          <td>{{ a.data_alt }}</td>
         </tr>
         {% endfor %}
+      
       </table>
     </div>
   </div>

@@ -6,10 +6,12 @@ $(document).ready(function () {
 
   $("#preco_p, #preco, #preco_pesquise, #list_preco, #soma_filtro, #soma_home").mask('000.000,00', {reverse: true});
   
+  $("#list_h").each(function(){
+     var a=$('tr').length
+    console.log(a)
 
-
-
-
+  })
+  
    //called when key is pressed in textbox
     $("#preco_p, #data, #preco, #preco_p").keypress(function (e) {
        //if the letter is not digit then display error and don't type anything

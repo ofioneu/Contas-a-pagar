@@ -22,6 +22,7 @@ class ContasModel(db.Model):
     preco = db.Column(db.String(), nullable=True)
     data_venc = db.Column(db.Date(), nullable=True)
     comment = db.Column(db.Text(80))
+    pago = db.Column(db.String(5))
 
 class HistoryModel(db.Model):
     __tablename__ = 'historico_contas'
@@ -30,6 +31,8 @@ class HistoryModel(db.Model):
     preco = db.Column(db.String(), nullable=True)
     data_venc = db.Column(db.Date(), nullable=True)
     comment = db.Column(db.Text(80))
+    pago = db.Column(db.String(5))
+    data_alt = db.Column(db.Date())
 
 
 if __name__ == '__main__':
