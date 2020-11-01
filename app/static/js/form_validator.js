@@ -6,12 +6,33 @@ $(document).ready(function () {
 
   $("#preco_p, #preco, #preco_pesquise, #list_preco, #soma_filtro, #soma_home").mask('000.000,00', {reverse: true});
   
-  $("#list_h").each(function(){
-     var a=$('tr').length
-    console.log(a)
+  var table = $('table');
 
-  })
-  
+   table.find('tr').each(function(indice){
+      $(this).find('#list_h_td').each(function(indice){
+       var status = $(this).text()
+       if(status=='Pago'){
+          $(this).css('background', '#90EE90')
+       }
+       else{
+         $(this).css('background', '#FF6347')
+       }
+    });
+});
+
+ fetch('http://localhost:5000/venc')
+ .then(function(response){
+    return response.json()
+
+ })
+ .then(function(data){
+   let a = Object.keys(data)
+   a.forEach(function(k){
+      alert(`Faturas que vencem hoje:\n ${data[k]}`)
+   })
+   });
+    
+   
    //called when key is pressed in textbox
     $("#preco_p, #data, #preco, #preco_p").keypress(function (e) {
        //if the letter is not digit then display error and don't type anything

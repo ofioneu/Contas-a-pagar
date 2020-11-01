@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, Blueprint, url_for
 from forms.form import Historico
-from models.db_contas import db, HistoryModel
+from models.db_contas import db, HistoryModel, ContasModel
 from app import app_config
 from sqlalchemy import func
 import babel
@@ -61,7 +61,7 @@ def historico_filtro():
 
 
 def soma_history():
-    soma =  HistoryModel.query.filter_by(preco=HistoryModel.preco).all()
+    soma =  ContasModel.query.filter_by(preco=ContasModel.preco).all()
     somatoriaVet = []    
     for i in soma:
         valorStr =str(i.preco)
@@ -92,13 +92,16 @@ def soma_filtro_history(campo, date_format, datef_format):
         return somatoria
         
     elif campo == HistoryModel.pago:
-        resultado = HistoryModel.query.filter(HistoryModel.pago.is_(campo))
+        resultado = HistoryModel.query.filter(HistoryModel.pago=='1')
         somatoriaVet=[]
         for i in resultado:
             valorStr =str(i.preco)
+            print("valor str: ", valorStr)
             valorFormat = babel.numbers.parse_decimal(valorStr, locale='pt_BR')
             somatoriaVet.append(float(valorFormat))
+        print("vet: ", somatoriaVet)
         somatoria = sum(somatoriaVet)
+        print("Somatória: ", somatoria)
         return somatoria
     else:
         resultado = HistoryModel.query.filter(campo.like(date_format)).all()

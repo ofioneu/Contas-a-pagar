@@ -10,7 +10,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="{{ url_for('static', filename='js/form_validator.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.1/bootbox.min.js" integrity="sha512-eoo3vw71DUo5NRvDXP/26LFXjSFE1n5GQ+jZJhHz+oOTR4Bwt7QBCjsgGvuVMQUMMMqeEvKrQrNEI4xQMXp3uA==" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" integrity="sha512-UdIMMlVx0HEynClOIFSyOrPggomfhBKJE28LKl8yR3ghkgugPnG6iLfRfHwushZl1MOPSY6TsuBDGPK2X4zYKg==" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -31,7 +32,6 @@
         <div class="tituloform tituloformcadastro">
           Cadastro:
         </div>
-      
         <form class="regras" method="POST" action="/post">
           {{ form.csrf_token }}
 
@@ -42,6 +42,8 @@
           {{ form.data_venc.label }} {{ form.data_venc }}
           <p></p>
           {{ form.comment.label }} {{ form.comment(cols="35", rows="5") }}
+          <p></p>
+          {{ form.status_pg.label}} {{ form.status_pg }}
           <p></p>
           {{ form.submit() }}
           <p></p>
@@ -81,6 +83,11 @@
     <div id="btn-history">
       <a class="btn btn-primary" role="button" href="{{ url_for('history.historico') }}">Historico</a>
   </div>
+  <span id="kk">{{ venc_hj|safe }}</span>
+
+    {% for i in venc_hj %}
+          <p id="venc_hj">{{ i.descricao }} {{ i.preco }} {{ i.data_venc }}</p>
+    {% endfor %}
 
     <div class="table">
     <table>

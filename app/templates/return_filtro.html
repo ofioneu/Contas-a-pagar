@@ -43,19 +43,26 @@
       <td><b>Data Venc.</b></td>
       <td><b>Comentário</b></td>
       <td><b>Status</b></td>
+      <td><b>Atualizar</b></td>
+      <td><b>Apagar</b></td>
     </tr>
     <!--Data de vencimento-->
-    {% for a in item %}
-    <tr>
-      <td>{{ a.descricao }}</td>
-      <td>{{ a.preco }}</td>
-      <td>{{ a.data_venc.strftime('%d/%m/%Y') }}</td>
-      <td>{{ a.comment }}</td>
-      {% if a.pago == '1' %}
-        <td id="list_h_td">Pago</td>
-      {% else %}
-        <td id="list_h_td">Aberto</td>
-      {% endif %}
+    {% for item in contas %}
+    <tr id="linha_table">
+      <form action="/update/{{ item.id }}" method="POST">
+        <td>{{ form_lista.list_descr(value = item.descricao, size=20) }}</td>
+        <td>{{ form_lista.list_preco(value = item.preco) }}</td>
+        <td>{{ form_lista.list_date(value = item.data_venc.strftime('%d/%m/%Y'))}}</td>
+        <td>{{ form_lista.list_comment(value = item.comment, cols="35", rows="5") }}</td>
+        {% if item.pago == '1' %}
+            <td id="list_h_td">Pago</td>
+          {% else %}
+          <td id="list_h_td">Aberto</td>
+          {% endif %}
+        <td>{{ form_lista.list_submit() }}</td>
+        <td><a class="btn btn-danger btn-sm" href="/delete/{{ item.id }}" role="button">Delete</a></td>
+      </form>
+      </td>
     </tr>
     {% endfor %}
 
