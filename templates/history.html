@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="{{ url_for('static', filename='js/form_validator.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" integrity="sha512-UdIMMlVx0HEynClOIFSyOrPggomfhBKJE28LKl8yR3ghkgugPnG6iLfRfHwushZl1MOPSY6TsuBDGPK2X4zYKg==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>Contas</title>
+
+</head>
+
+<body>
+  <!--CORPO DOS COMODOS-->
+  <div class="container">
+
+
+    <div id="titulo">
+      <h1 id="titulo">HISTÓRICO DE LANÇAMENTOS</h1>
+    </div>
+
+    <div class="formularios">
+      <div id="form_pesquisa" class="col-sm-3">
+        <div class="tituloform tituloformpesquisa">
+          Pesquisa:
+        </div>
+        <form action="/select_history/" method="POST">
+          {{ form.csrf_token }}
+
+          {{ form.descricao_pesquise.label }} {{ form.descricao_pesquise(size=20) }}
+          <p></p>
+          {{ form.preco_pesquise.label }} {{ form.preco_pesquise }}
+          <p></p>
+          {{ form.date_pesquise_ini.label }} {{ form.date_pesquise_ini }}
+          <p></p>
+          {{ form.date_pesquise_fim.label }} {{ form.date_pesquise_fim }}
+          <p></p>
+          {{ form.comment_pesquise.label }} {{ form.comment_pesquise(cols="35", rows="5") }}
+          <p></p>
+          {{ form.status_pg_pesquise.label }} {{ form.status_pg_pesquise }}
+          <p></p>
+          {{ form.submit_pesquise() }}
+          <p></p>
+        </form>
+      </div>
+
+      <div id="form_valor" class="col-sm-3">
+        <!-- aqui vai o valor da soma -->
+        <h2>Valor total:</h2> <p id="soma_home">{{ "R$ {:,.2f}".format(soma_history) }}</p>
+      </div>
+    </div>
+
+    <div id = "btn-voltar">
+        <td><a class="btn btn-danger btn-sm" href="/" role="button">Voltar</a></td>
+      </div>
+
+
+    <table>
+        <tr>
+          <td><b>Descricao</b></td>
+          <td><b>Preço</b></td>
+          <td><b>Data Venc.</b></td>
+          <td><b>Comentário</b></td>
+          <td><b>Status</b></td>
+          <td><b>Data modificação</b></td>
+        </tr>
+        <!--Data de vencimento-->
+        
+        {% for a in item %}
+        <tr id="list_h">
+          <td>{{ a.descricao }}</td>
+          <td>{{ a.preco }}</td>
+          <td>{{ a.data_venc.strftime('%d/%m/%Y')}}</td>
+          <td>{{ a.comment }}</td>
+          {% if a.pago == '1' %}
+            <td id="list_h_td">Pago</td>
+          {% else %}
+          <td id="list_h_td">Aberto</td>
+          {% endif %}
+          <td>{{ a.data_alt }}</td>
+        </tr>
+        {% endfor %}
+      
+      </table>
+    </div>
+  </div>
+
+</body>
+
+</html>

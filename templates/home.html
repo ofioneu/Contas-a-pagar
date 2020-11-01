@@ -1,42 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="br">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <title>Contas</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="{{ url_for('static', filename='js/form_validator.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.1/bootbox.min.js" integrity="sha512-eoo3vw71DUo5NRvDXP/26LFXjSFE1n5GQ+jZJhHz+oOTR4Bwt7QBCjsgGvuVMQUMMMqeEvKrQrNEI4xQMXp3uA==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" integrity="sha512-UdIMMlVx0HEynClOIFSyOrPggomfhBKJE28LKl8yR3ghkgugPnG6iLfRfHwushZl1MOPSY6TsuBDGPK2X4zYKg==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>Contas</title>
 
-    <style>
-        table {
-          font-family: arial, sans-serif;
-          border-collapse: collapse;
-          width: 100%;
-        }
-        
-        td, th {
-          border: 1px solid #dddddd;
-          text-align: left;
-          padding: 8px;
-        }
-        
-        tr:nth-child(even) {
-          background-color: #dddddd;
-        }
-        </style>
 </head>
 
 <body>
-  <div id="titulo">
-    <h1>Contas a pagar</h1>
-  </div>
-    <div class = "container-fluid">
-      <div id="form" class ="col-sm-3">
-      <form method="POST" action="/post">
+  <div class="container">
+
+    <div id="titulo">
+      <h1 id="titulo">GERENCIADOR DE PAGAMENTOS</h1>
+    </div>
+
+    <div class="formularios">
+
+      <div id="form_cadastro" class="col-sm-3">
+        <div class="tituloform tituloformcadastro">
+          Cadastro:
+        </div>
+        <form class="regras" method="POST" action="/post">
           {{ form.csrf_token }}
-          
-          {{ form.nome.label }} {{ form.nome(size=20) }}
+
+          {{ form.descricao.label }} {{ form.descricao(size=20) }}
           <p></p>
           {{ form.preco.label }} {{ form.preco }}
           <p></p>
@@ -44,32 +43,83 @@
           <p></p>
           {{ form.comment.label }} {{ form.comment(cols="35", rows="5") }}
           <p></p>
+          {{ form.status_pg.label}} {{ form.status_pg }}
+          <p></p>
           {{ form.submit() }}
           <p></p>
-    </form>
-    </div>
-  </div>
-    <form method="POST">
-        <table>
-            <tr>
-                <td><b>Nome</b></td>
-                <td><b>Preço</b></td>
-                <td><b>Data Venc.</b></td>
-                <td><b>Comentário</b></td>
-                <td><b>Ação</b></td>
-            </tr>        
-        {% for item in contas %}
-        <tr>
-            <td>{{ item.nome }}</td>
-            <td>{{ item.preco }}</td>
-            <td>{{ item.data_venc }}</td>
-            <td>{{ item.comment }}</td>
-            <td><a class="btn btn-danger btn-sm" href="/delete/{{ item.id }}" role="button">Delete</a></td>
-        </tr>
-        {% endfor %}
-    </table>
-   
+        </form>
+      </div>
 
-    </form>
+      <div id="form_pesquisa" class="col-sm-3">
+        <div class="tituloform tituloformpesquisa">
+          Pesquisa:
+        </div>
+        <form class="regras" action="/select/" method="POST">
+          {{ form.csrf_token }}
+
+          {{ form.descricao_pesquise.label }} {{ form.descricao_pesquise(size=20) }}
+          <p></p>
+          {{ form.preco_pesquise.label }} {{ form.preco_pesquise }}
+          <p></p>
+          {{ form.date_pesquise_ini.label }} {{ form.date_pesquise_ini }}
+          <p></p>
+          {{ form.date_pesquise_fim.label }} {{ form.date_pesquise_fim }}
+          <p></p>
+          {{ form.comment_pesquise.label }} {{ form.comment_pesquise(cols="35", rows="5") }}
+          <p></p>
+          {{ form.status_pg_pesquise.label }} {{ form.status_pg_pesquise }}
+          <p></p>
+          {{ form.submit_pesquise() }}
+          <p></p>
+        </form>
+      </div>
+
+      <div id="form_valor" class="col-sm-3">
+        <!-- aqui vai o valor da soma -->
+        <h2>Valor total:</h2> <p id="soma_home">{{ "R$ {:,.2f}".format(soma) }}</p>
+      </div>
+    </div>
+
+    <div id="btn-history">
+      <a class="btn btn-primary" role="button" href="{{ url_for('history.historico') }}">Historico</a>
+  </div>
+  <span id="kk">{{ venc_hj|safe }}</span>
+
+    {% for i in venc_hj %}
+          <p id="venc_hj">{{ i.descricao }} {{ i.preco }} {{ i.data_venc }}</p>
+    {% endfor %}
+
+    <div class="table">
+    <table>
+      <tr id="coluna_name">
+        <td><b>Descricao</b></td>
+        <td><b>Preço</b></td>
+        <td><b>Data Venc.</b></td>
+        <td><b>Comentário</b></td>
+        <td><b>Status</b></td>
+        <td><b>Atualizar</b></td>
+        <td><b>Apagar</b></td>
+      </tr>
+      {% for item in contas %}
+      <tr id="linha_table">
+        <form action="/update/{{ item.id }}" method="POST">
+          <td>{{ form_lista.list_descr(value = item.descricao, size=20) }}</td>
+          <td>{{ form_lista.list_preco(value = item.preco) }}</td>
+          <td>{{ form_lista.list_date(value = item.data_venc.strftime('%d/%m/%Y'))}}</td>
+          <td>{{ form_lista.list_comment(value = item.comment, cols="35", rows="5") }}</td>
+          <td>{{ form_lista.status_pg.label }} {{ form_lista.status_pg(value = item.pago) }}</td>
+          <td>{{ form_lista.list_submit() }}</td>
+          <td><a class="btn btn-danger btn-sm" href="/delete/{{ item.id }}" role="button">Delete</a></td>
+        </form>
+        </td>
+      </tr>
+      {% endfor %}
+
+    </table>
+
+  </div>
+  </div>
+
 </body>
+
 </html>

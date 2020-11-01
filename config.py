@@ -9,26 +9,25 @@ class Config(object):
     APP = None
     #SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://postgres:root@localhost:5432/contas'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'
-    SENDGRID_API_KEY = 'API_KEY'
 
 class DevelopmentConfig(Config):
     TESTING = False
     DEBUG = True
-    IP_HOST = 'localhost'
+    IP_HOST = '0.0.0.0'
     PORT_HOST = 5000
     URL_MAIN = 'http://%s:%s/' % (IP_HOST, PORT_HOST)
 
 class TestingConfig(Config):
     TESTING = True
     DEBUG = True
-    IP_HOST = 'localhost' # Aqui geralmente é um IP de um servidor na nuvem e não o endereço da máquina local
+    IP_HOST = '0.0.0.0' # Aqui geralmente é um IP de um servidor na nuvem e não o endereço da máquina local
     PORT_HOST = 5000
     URL_MAIN = 'http://%s:%s/' % (IP_HOST, PORT_HOST)
 
 class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
-    IP_HOST = 'localhost' # Aqui geralmente é um IP de um servidor na nuvem e não o endereço da máquina local
+    IP_HOST = '0.0.0.0' # Aqui geralmente é um IP de um servidor na nuvem e não o endereço da máquina local
     PORT_HOST = 8080
     URL_MAIN = 'http://%s:%s/' % (IP_HOST, PORT_HOST)
 
